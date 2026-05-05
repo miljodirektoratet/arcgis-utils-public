@@ -32,7 +32,8 @@ jobs:
         run: pip install .
 
       - name: Import package and run entrypoint
-        run: python -c "import mdir_arcpy_utils_public as pkg; print(f'Package version: {pkg.__version__}'); pkg.main()"
+        run: |
+          python -c "import mdir_arcpy_utils_public as pkg; print(f'Package version: {pkg.__version__}'); pkg.main()"
 
   build-and-inspect:
     name: Build and Inspect Package
