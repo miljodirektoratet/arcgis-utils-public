@@ -64,13 +64,13 @@ python -m mdir_arcpy_utils_public.hello
 
 ## Module Installation
 
-In AGOL we recommend loading a single module file instead of installing the full package to reduce credits usage. The [demo_agol.ipynb](./notebooks/demo_agol.ipynb) notebook shows how to do this using the `load_github_module` function. You can pin to a version tag or a commit hash, or use `main` for quick development.
+In AGOL we recommend loading a single module file instead of installing the full package to reduce credits usage. The [demo_upload_module_to_agol.ipynb](./notebooks/demo_upload_module_to_agol.ipynb) notebook shows how to do this using the `load_github_module` function. You can pin to a version tag or a commit hash, or use `main` for quick development.
 
 ## Development
 
 Choose one local environment manager.
 
-### Option A: Conda
+### Option A: Conda (recommended for ArcGIS work)
 
 ```powershell
 conda env create -f environment.yml
@@ -81,6 +81,8 @@ pip install -e .
 ```
 
 ### Option B: Pixi
+
+Recommended when Conda or ArcGIS Pro is not available and you only need non-ArcPy functionality (for example pure Python helper modules). ArcPy-based functionality requires an ArcGIS Pro-compatible Conda environment and will not work in a generic Pixi-only setup.
 
 ```powershell
 pixi install
