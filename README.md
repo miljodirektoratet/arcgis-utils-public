@@ -1,13 +1,17 @@
 # mdir-arcpy-utils-public
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) [![GitHub Release](https://img.shields.io/github/v/release/miljodirektoratet/arcpy-utils-public?logo=python)](https://github.com/miljodirektoratet/arcpy-utils-public/releases) [![CI Python](https://img.shields.io/github/actions/workflow/status/miljodirektoratet/arcpy-utils-public/ci-python.yml?branch=main&label=CI%20Python&style=flat)](https://github.com/miljodirektoratet/arcpy-utils-public/actions/workflows/ci-python.yml) [![CD Python](https://img.shields.io/github/actions/workflow/status/miljodirektoratet/arcpy-utils-public/cd-python.yml?label=CD%20Python&style=flat)](https://github.com/miljodirektoratet/arcpy-utils-public/actions/workflows/cd-python.yml)
+
 Python utility package for ArcGIS Pro 3.5 and AGOL/ESRI-related tasks at the Norwegian Environment Agency (miljødirektoratet).
 
 **Table of Contents**
 
 - [Guidelines](#guidelines)
+- [Workflow Statuses](#workflow-statuses)
 - [Package Installation](#package-installation)
 - [Module Installation](#module-installation)
 - [Development](#development)
+- [Deployment (Git Tags)](#deployment-git-tags)
 
 ## Guidelines
 
@@ -26,6 +30,14 @@ Python utility package for ArcGIS Pro 3.5 and AGOL/ESRI-related tasks at the Nor
 | notebooks                   | Usage examples and workflow demos                |
 | environment.yml             | Conda environment definition                     |
 | pyproject.toml              | Python packaging metadata and Pixi configuration |
+
+## Workflow Statuses
+
+| Job               | Status                                                                                                                                              | Description                                            |
+| ----------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ |
+| **CI Python**     | ![Status](https://img.shields.io/github/actions/workflow/status/miljodirektoratet/arcpy-utils-public/ci-python.yml?branch=main&label=&style=flat)   | Package install smoke test and package build/inspect   |
+| **CD Python**     | ![Status](https://img.shields.io/github/actions/workflow/status/miljodirektoratet/arcpy-utils-public/cd-python.yml?label=&style=flat)               | Build package artifacts and publish to GitHub Releases |
+| **Security Scan** | ![Status](https://img.shields.io/github/actions/workflow/status/miljodirektoratet/arcpy-utils-public/scan-codeql.yml?branch=main&label=&style=flat) | CodeQL security scanning                               |
 
 ## Package Installation
 
@@ -64,4 +76,20 @@ pip install -e .
 pixi install
 pixi shell
 pixi run install-editable
+```
+
+## Deployment (Git Tags)
+
+The Python release workflow is tag-driven. Pushing a tag matching `v*.*.*` triggers `CD | Python Build and Publish`, which builds package artifacts and uploads them to GitHub Releases.
+
+```powershell
+# Example: create and push a release tag
+git tag v0.0.1
+git push origin v0.0.1
+```
+
+After deployment, install from the tagged release reference:
+
+```powershell
+pip install "git+https://github.com/miljodirektoratet/arcpy-utils-public.git@v0.0.1"
 ```
