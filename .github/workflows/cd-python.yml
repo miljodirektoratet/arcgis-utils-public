@@ -1,0 +1,50 @@
+name: CD | Python Build and Publish
+
+on:
+  # Publish using git tags
+  push:
+    tags:
+      - v*.*.*
+  workflow_dispatch:
+
+permissions:
+  contents: write # Needed to upload release assets
+
+jobs:
+  build-and-release:
+    name: Build and publish to GitHub Releases
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0 # Required for setuptools-scm
+          persist-credentials: false
+
+      - name: Build package
+        uses: hynek/build-and-inspect-python-package@efb823f52190ad02594531168b7a2d5790e66516 # v2.14.0
+
+      - name: Download built artifacts
+        uses: actions/download-artifact@v5
+        with:
+          name: Packages
+          path: dist
+
+      - name: Upload to GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/*
+          body: |
+            ## Installation
+
+            Install directly from this release:
+            ```bash
+            pip install https://github.com/miljodirektoratet/arcpy-utils-public/releases/download/${{ github.ref_name }}/mdir_arcpy_utils_public-*.whl
+            ```
+
+            Or from the repository:
+            ```bash
+            pip install git+https://github.com/miljodirektoratet/arcpy-utils-public.git@${{ github.ref_name }}
+            ```
+          fail_on_unmatched_files: true
