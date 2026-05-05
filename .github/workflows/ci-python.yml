@@ -9,10 +9,14 @@ on:
 
 jobs:
   package-install-smoke:
-    name: Package Install Smoke Test
+    name: Package Install Smoke Test (Python ${{ matrix.python-version }})
     runs-on: ubuntu-latest
     permissions:
       contents: read
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.13"]
 
     steps:
       - name: Checkout repository
@@ -23,7 +27,7 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
+          python-version: ${{ matrix.python-version }}
 
       - name: Upgrade pip
         run: python -m pip install --upgrade pip

@@ -7,7 +7,7 @@ name = "mdir-arcpy-utils-public"
 version = "0.0.1"
 description = "Conda-based ArcPy utilities for ArcGIS Pro 3.5"
 readme = "README.md"
-requires-python = ">=3.11,<3.12"
+requires-python = ">=3.11,<3.14"
 authors = [
   { name = "Miljodirektoratet" }
 ]
@@ -15,8 +15,10 @@ license = { text = "MIT" }
 classifiers = [
   "Programming Language :: Python :: 3",
   "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
   "License :: OSI Approved :: MIT License",
-  "Operating System :: Microsoft :: Windows"
+  "Operating System :: OS Independent"
 ]
 
 dependencies = []

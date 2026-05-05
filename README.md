@@ -41,6 +41,10 @@ Python utility package for ArcGIS Pro 3.5 and AGOL/ESRI-related tasks at the Nor
 
 ## Package Installation
 
+Package installation must be done inside a Python environment compatible with ArcGIS Pro 3.5+ (typically Python 3.11) or ArcGIS Online notebooks (Python 3.13).
+
+If your runtime does not have `git` installed (for example in AGOL notebook environments), use the ZIP-based install commands below instead of `git+https` URLs.
+
 ```powershell
 # main branch (fast iteration)
 pip install "git+https://github.com/miljodirektoratet/arcpy-utils-public.git@main"
@@ -50,6 +54,12 @@ pip install "git+https://github.com/miljodirektoratet/arcpy-utils-public.git@v0.
 
 # commit (strict reproducibility)
 pip install "git+https://github.com/miljodirektoratet/arcpy-utils-public.git@cff3f70b85822c82204c0e66876c240fbebeb563"
+
+# no-git fallback: install from tag ZIP archive
+pip install "https://github.com/miljodirektoratet/arcpy-utils-public/archive/refs/tags/v0.0.1.zip"
+
+# run the hello entrypoint
+python -m mdir_arcpy_utils_public.hello
 ```
 
 ## Module Installation
