@@ -16,7 +16,7 @@ Python utility package for ArcGIS Pro 3.5 and AGOL/ESRI-related tasks at the Nor
 ## Guidelines
 
 - **ArcGIS Python**: python utilities intended for ArcGIS Pro 3.5 runtime or ArcGIS Online.
-- **Module layout**: keep reusable modules inside `src/mdir_arcpy_utils_public` so they can be used both as package imports and as direct module files (for example from AGOL workflows).
+- **Module layout**: keep reusable modules inside `src/mdir_arcpy_utils_public` so they can be used both as package imports and as direct module files (for example for AGOL workflows).
 - **Public code**: public-safe helper code only, sensitive code actual admin-tasks or infrastructure code is stored internally.
 - **Security practices**:
   - Never commit passwords, tokens, or other sensitive data. Use key vaults for secret management.
