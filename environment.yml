@@ -1,0 +1,12 @@
+name: mdir-arcpy-utils-public
+channels:
+  - esri
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.11
+  - arcgispro=3.5
+  - arcpy=3.5
+  - pip
+  - pip:
+      - -e .
