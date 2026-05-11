@@ -1,4 +1,7 @@
-from importlib.metadata import PackageNotFoundError, version
+import re
+import sys
+
+from arcgis.gis import GIS
 
 def add_users_to_group(
     gis: GIS,
