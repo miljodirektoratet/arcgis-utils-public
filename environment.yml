@@ -7,6 +7,10 @@ dependencies:
   - python=3.11
   - arcgispro=3.5
   - arcpy=3.5
+  - python-dotenv
+  - azure-identity
+  - azure-keyvault-secrets
+  - azure-storage-blob
   - pip
   - pip:
       - -e .

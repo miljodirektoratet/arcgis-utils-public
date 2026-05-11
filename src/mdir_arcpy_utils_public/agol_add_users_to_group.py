@@ -3,7 +3,7 @@ import sys
 
 from arcgis.gis import GIS
 
-def add_users_to_group(
+def agol_add_users_to_group(
     gis: GIS,
     oidc_brukere: list[str],
     arcgis_brukere: list[str],
@@ -13,7 +13,6 @@ def add_users_to_group(
 ) -> None:
     """
     Søk etter brukere i to lister og legg dem til en eksisterende gruppe.
-
     :param gis:                       Authenticated GIS object (I praksis GIS("home"))
     :param oidc_brukere:              Liste med e-post adresser som skal legges til
     :param arcgis_brukere:            Liste med brukernavn som skal legges til 
