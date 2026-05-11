@@ -5,7 +5,7 @@ from __future__ import annotations
 from importlib.metadata import PackageNotFoundError, version
 
 from .hello import main
-from. agol_add_users_to_group import agol_add_users_to_group
+from .agol_add_users_to_group import agol_add_users_to_group
 try:
 	__version__ = version("mdir-arcpy-utils-public")
 except PackageNotFoundError:
