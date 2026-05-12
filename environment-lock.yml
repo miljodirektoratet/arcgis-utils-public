@@ -1,4 +1,4 @@
-name: arcgis-utils-public
+name: gis-utils-public
 channels:
   - microsoft
   - conda-forge

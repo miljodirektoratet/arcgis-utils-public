@@ -3,9 +3,9 @@ requires = ["setuptools>=69", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "arcgis-utils-public"
+name = "gis-utils-public"
 version = "0.0.3"
-description = "Utilities for ArcGIS Pro 3.5"
+description = "GIS utilities for the Norwegian Environment Agency"
 readme = "README.md"
 requires-python = ">=3.11,<3.14"
 authors = [

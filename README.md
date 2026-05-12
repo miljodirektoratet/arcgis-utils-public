@@ -1,4 +1,4 @@
-# arcgis-utils-public
+# gis-utils-public
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) [![GitHub Release](https://img.shields.io/github/v/release/miljodirektoratet/arcgis-utils-public?logo=python)](https://github.com/miljodirektoratet/arcgis-utils-public/releases) [![CI Python](https://img.shields.io/github/actions/workflow/status/miljodirektoratet/arcgis-utils-public/ci-python.yml?branch=main&label=CI%20Python&style=flat)](https://github.com/miljodirektoratet/arcgis-utils-public/actions/workflows/ci-python.yml) [![CD Python](https://img.shields.io/github/actions/workflow/status/miljodirektoratet/arcgis-utils-public/cd-python.yml?label=CD%20Python&style=flat)](https://github.com/miljodirektoratet/arcgis-utils-public/actions/workflows/cd-python.yml)
 
@@ -16,7 +16,7 @@ Python utility package for ArcGIS Pro 3.5 and AGOL/ESRI-related tasks at the Nor
 ## Guidelines
 
 - **ArcGIS Python**: python utilities intended for ArcGIS Pro 3.5 runtime or ArcGIS Online.
-- **Module layout**: keep reusable modules inside `src/arcgis_utils_public` so they can be used both as package imports and as direct module files (for example for AGOL workflows).
+- **Module layout**: keep reusable modules inside `src/gis_utils_public` so they can be used both as package imports and as direct module files (for example for AGOL workflows).
 - **Public code**: public-safe helper code only, sensitive code actual admin-tasks or infrastructure code is stored internally.
 - **Security practices**:
   - Never commit passwords, tokens, or other sensitive data. Use key vaults for secret management.
@@ -24,12 +24,12 @@ Python utility package for ArcGIS Pro 3.5 and AGOL/ESRI-related tasks at the Nor
 
 ### Repository Structure
 
-| File or Directory       | Purpose                               |
-| ----------------------- | ------------------------------------- |
-| src/arcgis_utils_public | Python package source                 |
-| notebooks               | Usage examples and workflow demos     |
-| environment.yml         | Conda environment definition (pinned) |
-| pyproject.toml          | Python packaging metadata             |
+| File or Directory    | Purpose                               |
+| -------------------- | ------------------------------------- |
+| src/gis_utils_public | Python package source                 |
+| notebooks            | Usage examples and workflow demos     |
+| environment.yml      | Conda environment definition (pinned) |
+| pyproject.toml       | Python packaging metadata             |
 
 ## Workflow Statuses
 

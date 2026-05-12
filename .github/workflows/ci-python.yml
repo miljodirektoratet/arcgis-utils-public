@@ -35,9 +35,13 @@ jobs:
       - name: Install package
         run: pip install .
 
-      - name: Smoke test package metadata
+      # SMOKE TEST: Open-GIS functionality only
+      # This test validates package installation and metadata on a standard Python environment.
+      # ArcGIS-dependent functionality is NOT tested in CI because it requires an ArcGIS Pro/ArcPy runtime.
+      # ArcGIS functionality testing is done locally in development environments with ArcGIS Pro available only.
+      - name: Smoke test package metadata (open-gis only)
         run: |
-          python -c "from importlib.metadata import version; print(f'Package version: {version(\"arcgis-utils-public\")}')"
+          python -c "from importlib.metadata import version; print(f'Package version: {version(\"gis-utils-public\")}')"
 
   build-and-inspect:
     name: Build and Inspect Package

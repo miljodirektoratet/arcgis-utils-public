@@ -1,5 +1,5 @@
 # File: environment.yml
-# Description: Pinned ArcGIS Pro 3.5 environment for arcgis-utils-public development.
+# Description: Pinned ArcGIS Pro 3.5 environment for gis-utils-public development.
 # Platform: win-64
 # ArcGIS Pro: 3.5.x
 #
@@ -9,13 +9,13 @@
 #     conda env create -f environment.yml -p ./env
 #     conda activate ./env
 #   Or for global installation:
-#   -> installs env on USERPROFILE\AppData\Local\ESRI\conda\envs\arcgis-utils-public
+#   -> installs env on USERPROFILE\AppData\Local\ESRI\conda\envs\gis-utils-public
 #     conda env create -f environment.yml
-#     conda activate arcgis-utils-public
+#     conda activate gis-utils-public
 #   Export the environment:
 #     conda env export --no-builds > environment.yml
 
-name: arcgis-utils-public
+name: gis-utils-public
 channels:
   - esri
   - conda-forge
