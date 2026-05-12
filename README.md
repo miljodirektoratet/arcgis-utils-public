@@ -133,10 +133,10 @@ python -m gis_utils_public
 # Use ArcGIS code (now that ArcGIS/ArcPy is available)
 python -c "
 from arcgis.gis import GIS
-from gis_utils_public.arcgis_utils.agol_user_admin import agol_add_users_to_group
+from gis_utils_public import arcgis_utils
 
 gis = GIS('home')
-agol_add_users_to_group(
+arcgis_utils.agol_user_admin.agol_add_users_to_group(
     gis=gis,
     oidc_brukere=['user@example.com'],
     arcgis_brukere=['arcgis_user'],
