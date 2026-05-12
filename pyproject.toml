@@ -23,6 +23,31 @@ classifiers = [
 
 dependencies = []
 
+[project.optional-dependencies]
+# Development and testing dependencies (all tools for local development)
+dev = [
+  "pytest==7.4.3",
+  "ruff==0.6.4",
+  # Azure dependencies
+  "azure-common==1.1.28",
+  "azure-core==1.35.1",
+  "azure-keyvault==4.2.0",
+  "azure-keyvault-certificates==4.10.0",
+  "azure-keyvault-keys==4.11.0",
+  "azure-keyvault-secrets==4.10.0",
+  "azure-mgmt-core==1.6.0",
+  "azure-mgmt-storage==23.0.1",
+  "isodate==0.7.2",
+  # Database dependencies
+  "psycopg2==2.9.10",
+  "pymssql==2.3.7",
+  # Environment variable management
+  "python-dotenv==1.2.2",
+]
+
+[project.scripts]
+gis-utils-public = "gis_utils_public.main:main"
+
 [tool.setuptools]
 package-dir = { "" = "src" }
 
