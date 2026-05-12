@@ -1,4 +1,4 @@
-# mdir-arcpy-utils-public
+# arcgis-utils-public
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) [![GitHub Release](https://img.shields.io/github/v/release/miljodirektoratet/arcpy-utils-public?logo=python)](https://github.com/miljodirektoratet/arcpy-utils-public/releases) [![CI Python](https://img.shields.io/github/actions/workflow/status/miljodirektoratet/arcpy-utils-public/ci-python.yml?branch=main&label=CI%20Python&style=flat)](https://github.com/miljodirektoratet/arcpy-utils-public/actions/workflows/ci-python.yml) [![CD Python](https://img.shields.io/github/actions/workflow/status/miljodirektoratet/arcpy-utils-public/cd-python.yml?label=CD%20Python&style=flat)](https://github.com/miljodirektoratet/arcpy-utils-public/actions/workflows/cd-python.yml)
 
@@ -16,7 +16,7 @@ Python utility package for ArcGIS Pro 3.5 and AGOL/ESRI-related tasks at the Nor
 ## Guidelines
 
 - **ArcGIS Python**: python utilities intended for ArcGIS Pro 3.5 runtime or ArcGIS Online.
-- **Module layout**: keep reusable modules inside `src/mdir_arcpy_utils_public` so they can be used both as package imports and as direct module files (for example for AGOL workflows).
+- **Module layout**: keep reusable modules inside `src/arcgis_utils_public` so they can be used both as package imports and as direct module files (for example for AGOL workflows).
 - **Public code**: public-safe helper code only, sensitive code actual admin-tasks or infrastructure code is stored internally.
 - **Security practices**:
   - Never commit passwords, tokens, or other sensitive data. Use key vaults for secret management.
@@ -24,12 +24,12 @@ Python utility package for ArcGIS Pro 3.5 and AGOL/ESRI-related tasks at the Nor
 
 ### Repository Structure
 
-| File or Directory           | Purpose                                          |
-| --------------------------- | ------------------------------------------------ |
-| src/mdir_arcpy_utils_public | Python package source                            |
-| notebooks                   | Usage examples and workflow demos                |
-| environment.yml             | Conda environment definition                     |
-| pyproject.toml              | Python packaging metadata and Pixi configuration |
+| File or Directory       | Purpose                               |
+| ----------------------- | ------------------------------------- |
+| src/arcgis_utils_public | Python package source                 |
+| notebooks               | Usage examples and workflow demos     |
+| environment.yml         | Conda environment definition (pinned) |
+| pyproject.toml          | Python packaging metadata             |
 
 ## Workflow Statuses
 
@@ -59,7 +59,7 @@ pip install "git+https://github.com/miljodirektoratet/arcpy-utils-public.git@cff
 pip install "https://github.com/miljodirektoratet/arcpy-utils-public/archive/refs/tags/v0.0.3.zip"
 
 # run the hello entrypoint
-python -m mdir_arcpy_utils_public.hello
+python -m arcgis_utils_public.hello
 ```
 
 ## Module Installation
@@ -68,27 +68,44 @@ In AGOL we recommend loading a single module file instead of installing the full
 
 ## Development
 
-Choose one local environment manager.
+This package requires a Conda environment with ArcGIS Pro 3.5 to use ArcPy-dependent functionality.
 
-### Option A: Conda (recommended for ArcGIS work)
+### Setup
 
 ```powershell
-conda env create -f environment.yml
-conda activate mdir-arcpy-utils-public
+# Create environment (project-local)
+conda env create -f environment.yml -p ./env
+conda activate ./env
 
-# Local development package
+# Install package in editable mode
 pip install -e .
 ```
 
-### Option B: Pixi
+### Install into Existing ArcGIS Pro Environment
 
-Recommended when Conda or ArcGIS Pro is not available and you only need non-ArcPy functionality (for example pure Python helper modules). ArcPy-based functionality requires an ArcGIS Pro-compatible Conda environment and will not work in a generic Pixi-only setup.
+If you already have ArcGIS Pro installed with its own Conda environment, you can install this package into that environment without creating a new environment.
 
 ```powershell
-pixi install
-pixi shell
-pixi run install-editable
+# Activate your existing ArcGIS Pro environment
+conda activate <your-arcgis-env-name>
+
+# Install from source (editable)
+pip install -e "git+https://github.com/miljodirektoratet/arcpy-utils-public.git#egg=arcgis-utils-public"
+
+# Or install from a release tag
+pip install "git+https://github.com/miljodirektoratet/arcpy-utils-public.git@v0.0.3"
+
+# Or install from main branch
+pip install "git+https://github.com/miljodirektoratet/arcpy-utils-public.git@main"
 ```
+
+**Note:** The `environment.yml` file is a complete standalone environment. It's only needed if you want a dedicated project environment. For installing into an existing ArcGIS Pro environment, use `pip` only.
+
+### Requirements
+
+- **ArcGIS Pro 3.5+** or AGOL notebook environment
+- **Conda** (package manager)
+- **Python 3.11–3.13**
 
 ## Deployment (Git Tags)
 

@@ -3,9 +3,9 @@ requires = ["setuptools>=69", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "mdir-arcpy-utils-public"
+name = "arcgis-utils-public"
 version = "0.0.3"
-description = "Conda-based ArcPy utilities for ArcGIS Pro 3.5"
+description = "Utilities for ArcGIS Pro 3.5"
 readme = "README.md"
 requires-python = ">=3.11,<3.14"
 authors = [
@@ -28,18 +28,3 @@ package-dir = { "" = "src" }
 
 [tool.setuptools.packages.find]
 where = ["src"]
-
-[tool.pixi.workspace]
-name = "mdir-arcpy-utils-public"
-authors = ["Miljodirektoratet"]
-channels = ["esri", "conda-forge", "defaults"]
-platforms = ["win-64"]
-
-[tool.pixi.dependencies]
-python = "3.11.*"
-arcgispro = "3.5.*"
-arcpy = "3.5.*"
-pip = "*"
-
-[tool.pixi.tasks]
-install-editable = "python -m pip install -e ."

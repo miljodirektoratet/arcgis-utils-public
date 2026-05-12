@@ -40,7 +40,7 @@ jobs:
 
             Install directly from this release:
             ```bash
-            pip install https://github.com/miljodirektoratet/arcpy-utils-public/releases/download/${{ github.ref_name }}/mdir_arcpy_utils_public-*.whl
+            pip install https://github.com/miljodirektoratet/arcpy-utils-public/releases/download/${{ github.ref_name }}/arcgis_utils_public-*.whl
             ```
 
             Or from the repository:

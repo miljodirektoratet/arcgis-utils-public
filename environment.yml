@@ -1,16 +1,51 @@
-name: mdir-arcpy-utils-public
+# File: environment.yml
+# Description: Pinned ArcGIS Pro 3.5 environment for arcgis-utils-public development.
+# Platform: win-64
+# ArcGIS Pro: 3.5.x
+#
+# Usage:
+#   From project root (cd <project_dir> first):
+#   -> installs env in <project_dir>\env
+#     conda env create -f environment.yml -p ./env
+#     conda activate ./env
+#   Or for global installation:
+#   -> installs env on USERPROFILE\AppData\Local\ESRI\conda\envs\arcgis-utils-public
+#     conda env create -f environment.yml
+#     conda activate arcgis-utils-public
+#   Export the environment:
+#     conda env export --no-builds > environment.yml
+
+name: arcgis-utils-public
 channels:
   - esri
   - conda-forge
   - defaults
 dependencies:
-  - python=3.11
+  - python=3.11.*
+  - arcgis=2.4.1.1
+  - arcgis-mapping=4.31.0
   - arcgispro=3.5
   - arcpy=3.5
-  - python-dotenv
-  - azure-identity
-  - azure-keyvault-secrets
-  - azure-storage-blob
+  - arcpy-base=3.5
+  - jupyter
+  - jupyterlab
   - pip
   - pip:
-      - -e .
+      # Development dependencies
+      - ruff==0.6.4
+      - pytest==7.4.3
+      # Azure dependencies
+      - azure-common==1.1.28
+      - azure-core==1.35.1
+      - azure-keyvault==4.2.0
+      - azure-keyvault-certificates==4.10.0
+      - azure-keyvault-keys==4.11.0
+      - azure-keyvault-secrets==4.10.0
+      - azure-mgmt-core==1.6.0
+      - azure-mgmt-storage==23.0.1
+      - isodate==0.7.2
+      # Database dependencies
+      - psycopg2==2.9.10
+      - pymssql==2.3.7
+      # Env variable management
+      - python-dotenv==1.2.2
