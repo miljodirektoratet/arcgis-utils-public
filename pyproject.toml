@@ -21,12 +21,19 @@ classifiers = [
   "Operating System :: OS Independent"
 ]
 
-dependencies = []
+dependencies = [
+    "gdal>=3.12.2",
+    "rasterio>=1.4.4",
+]
 
+# Optional dependencies
+# Install all: uv sync --all-extras
+# Install specific: uv sync --extra dev or uv sync --extra pytorch
 [project.optional-dependencies]
 dev = [
   "pytest==7.4.3",
   "ruff==0.6.4",
+  "ipykernel==6.29.5",
   "python-dotenv==1.2.2",
   # Azure dependencies
   "azure-common==1.1.28",
@@ -42,6 +49,13 @@ dev = [
   "psycopg2==2.9.10",
   "pymssql==2.3.7",
 ]
+pytorch = [
+  "cupy-cuda12x>=14.0.1",
+  "torch>=2.0.0",
+  "torchvision>=0.15.0",
+  "torchaudio>=2.0.0",
+  "thor-terratorch-ext",
+]
 
 [project.scripts]
 gis-utils-public = "gis_utils_public.main:main"
@@ -55,3 +69,29 @@ where = ["src"]
 [tool.setuptools_scm]
 tag_regex = "^v?(?P<version>\\d+\\.\\d+\\.\\d+)$"
 fallback_version = "0.0.6"
+
+# UV package indexes and sources for geospatial and PyTorch
+[tool.uv.sources]
+gdal = [
+  { index = "gdal-wheels", marker = "sys_platform == 'linux'" },
+  { index = "geospatial_wheels", marker = "sys_platform == 'win32'" },
+]
+torch = { index = "pytorch-cu128" }
+torchvision = { index = "pytorch-cu128" }
+torchaudio = { index = "pytorch-cu128" }
+thor-terratorch-ext = { git = "https://github.com/FM4CS/thor_terratorch_ext.git" }
+
+[[tool.uv.index]]
+name = "geospatial_wheels"
+url = "https://nathanjmcdougall.github.io/geospatial-wheels-index/"
+explicit = true
+
+[[tool.uv.index]]
+name = "gdal-wheels"
+url = "https://gitlab.com/api/v4/projects/61637378/packages/pypi/simple"
+explicit = true
+
+[[tool.uv.index]]
+name = "pytorch-cu128"
+url = "https://download.pytorch.org/whl/cu128"
+explicit = true
