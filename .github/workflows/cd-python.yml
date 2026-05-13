@@ -31,6 +31,46 @@ jobs:
           name: Packages
           path: dist
 
+      - name: Verify artifact version matches tag
+        shell: bash
+        env:
+          TAG_NAME: ${{ github.ref_name }}
+        run: |
+          set -euo pipefail
+          EXPECTED_VERSION="${TAG_NAME#v}"
+
+          python - <<'PY'
+          import glob
+          import os
+          import re
+          import sys
+
+          expected = os.environ["EXPECTED_VERSION"]
+          wheel_versions = set()
+          sdist_versions = set()
+
+          for wheel in glob.glob("dist/*.whl"):
+              match = re.search(r"gis_utils_public-([0-9][^-]*)-", wheel)
+              if match:
+                  wheel_versions.add(match.group(1))
+
+          for sdist in glob.glob("dist/*.tar.gz"):
+              match = re.search(r"gis_utils_public-([0-9][^/]*)\.tar\.gz$", sdist)
+              if match:
+                  sdist_versions.add(match.group(1))
+
+          found_versions = wheel_versions | sdist_versions
+          if not found_versions:
+              print("No package versions could be parsed from dist artifacts.")
+              sys.exit(1)
+
+          if found_versions != {expected}:
+              print(f"Version mismatch. Tag expects {expected}, artifacts contain: {sorted(found_versions)}")
+              sys.exit(1)
+
+          print(f"Artifact version check passed: {expected}")
+          PY
+
       - name: Upload to GitHub Release
         uses: softprops/action-gh-release@v2
         with:

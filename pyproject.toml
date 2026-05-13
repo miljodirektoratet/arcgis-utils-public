@@ -1,10 +1,10 @@
 [build-system]
-requires = ["setuptools>=69", "wheel"]
+requires = ["setuptools>=69", "wheel", "setuptools-scm>=8"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "gis-utils-public"
-version = "0.0.3"
+dynamic = ["version"]
 description = "GIS utilities for the Norwegian Environment Agency"
 readme = "README.md"
 requires-python = ">=3.11,<3.14"
@@ -51,3 +51,7 @@ package-dir = { "" = "src" }
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.setuptools_scm]
+tag_regex = "^v?(?P<version>\\d+\\.\\d+\\.\\d+)$"
+fallback_version = "0.0.0"
