@@ -37,7 +37,6 @@ jobs:
           TAG_NAME: ${{ github.ref_name }}
         run: |
           set -euo pipefail
-          EXPECTED_VERSION="${TAG_NAME#v}"
 
           python - <<'PY'
           import glob
@@ -45,7 +44,7 @@ jobs:
           import re
           import sys
 
-          expected = os.environ["EXPECTED_VERSION"]
+          expected = os.environ["TAG_NAME"].removeprefix("v")
           wheel_versions = set()
           sdist_versions = set()
 
