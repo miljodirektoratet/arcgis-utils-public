@@ -35,7 +35,8 @@ ADDING NEW CODE:
 
 2. ArcGIS-dependent function/module:
 	- Create module in arcgis_utils/ (e.g., arcgis_utils/new_module.py)
-	- No changes needed to __init__.py
+	- Register module in arcgis_utils/__init__.py (for static analysis support while avoiding ArcGIS imports during package initialization)
+	- Example: add module_1 in arcgis_utils/__init__.py, then call arcgis_utils.module_1.function_a(...)
 	- Users import directly: "from gis_utils_public.arcgis_utils.new_module import new_function"
 """
 
