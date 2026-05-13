@@ -1,11 +1,10 @@
 name: CD | Python Build and Publish
 
 on:
-  # Publish using git tags
+  # ONLY ALLOW for publishing using git tags
   push:
     tags:
       - v*.*.*
-  workflow_dispatch:
 
 permissions:
   contents: write # Needed to upload release assets
