@@ -85,7 +85,7 @@ Use open-gis code only (e.g. don't load functions from arcgis_utils). The packag
 uv pip install "git+https://github.com/miljodirektoratet/gis-utils-public.git@main"
 
 # Or from a release tag
-uv pip install "git+https://github.com/miljodirektoratet/gis-utils-public.git@v0.0.3"
+uv pip install "git+https://github.com/miljodirektoratet/gis-utils-public.git@v0.0.6"
 
 # Use open-gis functionality
 python -m gis_utils_public
@@ -97,7 +97,7 @@ python -m gis_utils_public
 pip install "git+https://github.com/miljodirektoratet/gis-utils-public.git@main"
 
 # Or from a release tag
-pip install "git+https://github.com/miljodirektoratet/gis-utils-public.git@v0.0.3"
+pip install "git+https://github.com/miljodirektoratet/gis-utils-public.git@v0.0.6"
 
 # Use open-gis functionality
 python -m gis_utils_public
@@ -110,7 +110,7 @@ python -m gis_utils_public
 pip install "https://github.com/miljodirektoratet/gis-utils-public/archive/refs/heads/main.zip"
 
 # Or from a release tag
-pip install "https://github.com/miljodirektoratet/gis-utils-public/archive/refs/tags/v0.0.3.zip"
+pip install "https://github.com/miljodirektoratet/gis-utils-public/archive/refs/tags/v0.0.6.zip"
 ```
 
 ArcGIS modules are not loaded on package install, so no errors occur even though they're part of the package.
@@ -148,22 +148,7 @@ arcgis_utils.agol_user_admin.agol_add_users_to_group(
 
 ### ArcGIS Online Notebooks
 
-Load individual modules to reduce credits:
-
-```python
-# In AGOL notebook, load specific module without installing full package
-from arcgis.gis.tools import CodeExecutor
-
-module = load_github_module(
-    owner="miljodirektoratet",
-    repo="gis-utils-public",
-    reference="40c698d32d10371be10b3c0f74248dab238fd1b1",
-    module="src/gis_utils_public/hello.py",
-)
-module.main()
-```
-
-See [demo_upload_module_to_agol.ipynb](./notebooks/demo_upload_module_to_agol.ipynb) for complete examples.
+Load individual modules to reduce credits, see [demo_upload_module_to_agol.ipynb](./notebooks/demo_upload_module_to_agol.ipynb) for complete examples.
 
 ## Guidelines
 
@@ -296,15 +281,15 @@ Before creating a new release tag, update the package version in `pyproject.toml
 git tag --list
 
 # Example: create and push a release tag
-git tag -a v0.0.3 -m "release v0.0.3"
-git push origin v0.0.3
+git tag -a v0.0.6 -m "release v0.0.6"
+git push origin v0.0.6
 
 # Delete wrong tag
-git tag -d v.0.0.3
+git tag -d v.0.0.6
 ```
 
 After deployment, install from the tagged release reference:
 
 ```powershell
-pip install "git+https://github.com/miljodirektoratet/gis-utils-public.git@v0.0.3"
+pip install "git+https://github.com/miljodirektoratet/gis-utils-public.git@v0.0.6"
 ```
