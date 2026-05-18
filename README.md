@@ -1,94 +1,274 @@
-# mdir-arcpy-utils-public
+# gis-utils-public
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) [![GitHub Release](https://img.shields.io/github/v/release/miljodirektoratet/arcpy-utils-public?logo=python)](https://github.com/miljodirektoratet/arcpy-utils-public/releases) [![CI Python](https://img.shields.io/github/actions/workflow/status/miljodirektoratet/arcpy-utils-public/ci-python.yml?branch=main&label=CI%20Python&style=flat)](https://github.com/miljodirektoratet/arcpy-utils-public/actions/workflows/ci-python.yml) [![CD Python](https://img.shields.io/github/actions/workflow/status/miljodirektoratet/arcpy-utils-public/cd-python.yml?label=CD%20Python&style=flat)](https://github.com/miljodirektoratet/arcpy-utils-public/actions/workflows/cd-python.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) [![GitHub Release](https://img.shields.io/github/v/release/miljodirektoratet/gis-utils-public?logo=python)](https://github.com/miljodirektoratet/gis-utils-public/releases) [![CI Python](https://img.shields.io/github/actions/workflow/status/miljodirektoratet/gis-utils-public/ci-python.yml?branch=main&label=CI%20Python&style=flat)](https://github.com/miljodirektoratet/gis-utils-public/actions/workflows/ci-python.yml) [![CD Python](https://img.shields.io/github/actions/workflow/status/miljodirektoratet/gis-utils-public/cd-python.yml?label=CD%20Python&style=flat)](https://github.com/miljodirektoratet/gis-utils-public/actions/workflows/cd-python.yml)
 
-Python utility package for ArcGIS Pro 3.5 and AGOL/ESRI-related tasks at the Norwegian Environment Agency (miljødirektoratet).
+GIS utilities for the GIS platform at the Norwegian Environment Agency (miljødirektoratet).
+
+This package contains both **open-gis code** (portable to any Python environment) and **ArcGIS-dependent code** (requires ArcGIS Pro or ArcGIS Online). The design ensures that open-gis functionality works anywhere, while ArcGIS code is only loaded when explicitly used.
 
 **Table of Contents**
 
+- [Package Architecture](#package-architecture)
+- [Installation \& Usage](#installation--usage)
 - [Guidelines](#guidelines)
 - [Workflow Statuses](#workflow-statuses)
 - [Package Installation](#package-installation)
-- [Module Installation](#module-installation)
 - [Development](#development)
 - [Deployment (Git Tags)](#deployment-git-tags)
 
+## Package Architecture
+
+### Open-GIS Code (Portable)
+
+**Location:** Root of package (`src/gis_utils_public/`)
+
+**Characteristics:**
+
+- No ArcGIS dependencies
+- Works in any Python environment (CI/CD, non-ArcGIS machines, etc.)
+- Imported directly in `__init__.py`
+- Example: `src/gis_utils_public/main.py`
+
+**Import pattern:**
+
+```python
+# Safe in any environment
+from gis_utils_public import main
+main()
+```
+
+### ArcGIS-Dependent Code
+
+**Location:** `src/gis_utils_public/arcgis_utils/`
+
+**Characteristics:**
+
+- Requires ArcGIS Pro or ArcGIS Online connection
+- Only loaded when explicitly accessed
+- Only tested locally, not tested on CI-runners
+- NOT exported explicitly in `__init__.py`
+- Safe to install in any environment—ArcGIS modules are only imported when used
+- Examples: `arcgis_utils/agol_user_admin.py`
+
+**Import pattern:**
+
+```python
+# Only loads when you explicitly import from arcgis_utils
+from gis_utils_public.arcgis_utils.user_admin import agol_add_users_to_group
+
+# This function requires an authenticated GIS object
+agol_add_users_to_group(gis, oidc_users, arcgis_users, group_name)
+```
+
+### Why This Design?
+
+1. **CI/CD Compatibility:** Package installs on Ubuntu CI without ArcGIS errors
+2. **Flexible Deployment:** Same package works in:
+   - Local development (ArcGIS Pro)
+   - ArcGIS Online notebooks
+   - CI/CD pipelines
+   - Non-ArcGIS cloud environments
+3. **No Silent Failures:** You only import ArcGIS code when you need it
+
+## Installation & Usage
+
+### Non-ArcGIS Environments (Linux, macOS, Windows without ArcGIS Pro)
+
+Use open-gis code only (e.g. don't load functions from arcgis_utils). The package works in any Python 3.11+ environment.
+
+**Recommended: Use `uv` for faster, simpler dependency management.** [Install uv](https://docs.astral.sh/uv/getting-started/) if you don't have it.
+
+**Option 1: Install with `uv` (recommended, fast)**
+
+```bash
+# Install uv if you don't have it: https://docs.astral.sh/uv/getting-started/
+uv pip install "git+https://github.com/miljodirektoratet/gis-utils-public.git@main"
+
+# Or from a release tag
+uv pip install "git+https://github.com/miljodirektoratet/gis-utils-public.git@v0.0.6"
+
+# Use open-gis functionality
+python -m gis_utils_public
+```
+
+**Option 2: Install with `pip` (standard)**
+
+```bash
+pip install "git+https://github.com/miljodirektoratet/gis-utils-public.git@main"
+
+# Or from a release tag
+pip install "git+https://github.com/miljodirektoratet/gis-utils-public.git@v0.0.6"
+
+# Use open-gis functionality
+python -m gis_utils_public
+```
+
+**Option 3: Install from GitHub ZIP (no git required)**
+
+```bash
+# From main branch
+pip install "https://github.com/miljodirektoratet/gis-utils-public/archive/refs/heads/main.zip"
+
+# Or from a release tag
+pip install "https://github.com/miljodirektoratet/gis-utils-public/archive/refs/tags/v0.0.6.zip"
+```
+
+ArcGIS modules are not loaded on package install, so no errors occur even though they're part of the package.
+
+### ArcGIS Pro Environments (Windows with ArcGIS Pro 3.5+)
+
+Use both open-gis and ArcGIS code. **Conda is required** because ArcGIS and ArcPy are only available from Esri's conda channel (not pip).
+
+```powershell
+# Create a Conda environment with ArcGIS Pro 3.5 (required for ArcGIS/ArcPy)
+conda env create -f environment.yml -p ./env
+conda activate ./env
+
+# Install package (or install from git/release tag)
+pip install -e .
+
+# Use open-gis code
+python -m gis_utils_public
+
+# Use ArcGIS code (now that ArcGIS/ArcPy is available)
+python -c "
+from arcgis.gis import GIS
+from gis_utils_public import arcgis_utils
+
+gis = GIS('home')
+arcgis_utils.agol_user_admin.agol_add_users_to_group(
+    gis=gis,
+    oidc_brukere=['user@example.com'],
+    arcgis_brukere=['arcgis_user'],
+    gruppe_navn='My Group',
+    dry_run=True
+)
+"
+```
+
+### ArcGIS Online Notebooks
+
+Load individual modules to reduce credits, see [demo_upload_module_to_agol.ipynb](./notebooks/demo_upload_module_to_agol.ipynb) for complete examples.
+
 ## Guidelines
 
-- **ArcGIS Python**: python utilities intended for ArcGIS Pro 3.5 runtime or ArcGIS Online.
-- **Module layout**: keep reusable modules inside `src/mdir_arcpy_utils_public` so they can be used both as package imports and as direct module files (for example for AGOL workflows).
-- **Public code**: public-safe helper code only, sensitive code actual admin-tasks or infrastructure code is stored internally.
+- **Code organization**: Keep reusable modules in `src/gis_utils_public/`. Open-gis code goes in root; ArcGIS-dependent code goes in `arcgis_utils/`.
+- **Public code only**: Share only public-safe helper code. Sensitive tasks or infrastructure code stay internal.
 - **Security practices**:
   - Never commit passwords, tokens, or other sensitive data. Use key vaults for secret management.
   - Secret scanning, CodeQL, and Dependabot are enabled.
 
 ### Repository Structure
 
-| File or Directory           | Purpose                                          |
-| --------------------------- | ------------------------------------------------ |
-| src/mdir_arcpy_utils_public | Python package source                            |
-| notebooks                   | Usage examples and workflow demos                |
-| environment.yml             | Conda environment definition                     |
-| pyproject.toml              | Python packaging metadata and Pixi configuration |
+| File or Directory    | Purpose                               |
+| -------------------- | ------------------------------------- |
+| src/gis_utils_public | Python package source                 |
+| notebooks            | Usage examples and workflow demos     |
+| environment.yml      | Conda environment definition (pinned) |
+| pyproject.toml       | Python packaging metadata             |
 
 ## Workflow Statuses
 
-| Job               | Status                                                                                                                                              | Description                                            |
-| ----------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ |
-| **CI Python**     | ![Status](https://img.shields.io/github/actions/workflow/status/miljodirektoratet/arcpy-utils-public/ci-python.yml?branch=main&label=&style=flat)   | Package install smoke test and package build/inspect   |
-| **CD Python**     | ![Status](https://img.shields.io/github/actions/workflow/status/miljodirektoratet/arcpy-utils-public/cd-python.yml?label=&style=flat)               | Build package artifacts and publish to GitHub Releases |
-| **Security Scan** | ![Status](https://img.shields.io/github/actions/workflow/status/miljodirektoratet/arcpy-utils-public/scan-codeql.yml?branch=main&label=&style=flat) | CodeQL security scanning                               |
+| Job               | Status                                                                                                                                            | Description                                            |
+| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ |
+| **CI Python**     | ![Status](https://img.shields.io/github/actions/workflow/status/miljodirektoratet/gis-utils-public/ci-python.yml?branch=main&label=&style=flat)   | Package install smoke test and package build/inspect   |
+| **CD Python**     | ![Status](https://img.shields.io/github/actions/workflow/status/miljodirektoratet/gis-utils-public/cd-python.yml?label=&style=flat)               | Build package artifacts and publish to GitHub Releases |
+| **Security Scan** | ![Status](https://img.shields.io/github/actions/workflow/status/miljodirektoratet/gis-utils-public/scan-codeql.yml?branch=main&label=&style=flat) | CodeQL security scanning                               |
 
 ## Package Installation
 
-Package installation must be done inside a Python environment compatible with ArcGIS Pro 3.5+ (typically Python 3.11) or ArcGIS Online notebooks (Python 3.13).
+For detailed installation instructions and examples for different environments, see the [Installation & Usage](#installation--usage) section above.
 
-If your runtime does not have `git` installed (for example in AGOL notebook environments), use the ZIP-based install commands below instead of `git+https` URLs.
+**Quick start for non-ArcGIS environments:**
 
-```powershell
-# main branch (fast iteration)
-pip install "git+https://github.com/miljodirektoratet/arcpy-utils-public.git@main"
+```bash
+# Using uv (fast, recommended)
+uv pip install "git+https://github.com/miljodirektoratet/gis-utils-public.git@main"
 
-# tag (release workflow)
-pip install "git+https://github.com/miljodirektoratet/arcpy-utils-public.git@v0.0.3"
+# Using pip (standard)
+pip install "git+https://github.com/miljodirektoratet/gis-utils-public.git@main"
 
-# commit (strict reproducibility)
-pip install "git+https://github.com/miljodirektoratet/arcpy-utils-public.git@cff3f70b85822c82204c0e66876c240fbebeb563"
-
-# no-git fallback: install from tag ZIP archive
-pip install "https://github.com/miljodirektoratet/arcpy-utils-public/archive/refs/tags/v0.0.3.zip"
-
-# run the hello entrypoint
-python -m mdir_arcpy_utils_public.hello
+# Run the package
+python -m gis_utils_public
 ```
 
-## Module Installation
+**Quick start for ArcGIS Pro environments:**
 
-In AGOL we recommend loading a single module file instead of installing the full package to reduce credits usage. The [demo_upload_module_to_agol.ipynb](./notebooks/demo_upload_module_to_agol.ipynb) notebook shows how to do this using the `load_github_module` function. You can pin to a version tag or a commit hash, or use `main` for quick development.
+```powershell
+conda env create -f environment.yml -p ./env
+conda activate ./env
+pip install -e .
+python -m gis_utils_public
+```
 
 ## Development
 
-Choose one local environment manager.
+### Open-GIS Development (Any Python 3.11+)
 
-### Option A: Conda (recommended for ArcGIS work)
+For developing or testing open-gis code without ArcGIS Pro. **`uv` is recommended** for fast, reproducible development environments.
 
-```powershell
-conda env create -f environment.yml
-conda activate mdir-arcpy-utils-public
+```bash
+# Create virtual environment (optional, but recommended)
+uv venv
 
-# Local development package
-pip install -e .
+# Activate virtual environment
+source .venv/bin/activate  # Linux/macOS
+# or
+.venv\Scripts\activate     # Windows
+
+# Install with all development dependencies using uv (recommended)
+uv pip install -e ".[dev]"
+
+# Or use pip if you prefer
+pip install -e ".[dev]"
+
+# Run tests
+pytest
+
+# Format and Lint code
+ruff check src/
 ```
 
-### Option B: Pixi
+### ArcGIS Pro Development
 
-Recommended when Conda or ArcGIS Pro is not available and you only need non-ArcPy functionality (for example pure Python helper modules). ArcPy-based functionality requires an ArcGIS Pro-compatible Conda environment and will not work in a generic Pixi-only setup.
+For developing or testing ArcGIS-dependent code. **Conda is required** because ArcGIS/ArcPy are only available from Esri's conda channel.
 
 ```powershell
-pixi install
-pixi shell
-pixi run install-editable
+# Create Conda environment (project-local, required for ArcGIS/ArcPy)
+conda env create -f environment.yml -p ./env
+conda activate ./env
+
+# Install package with all development dependencies
+pip install -e ".[dev]"
+
+# Run tests (tests both open-gis and ArcGIS code)
+pytest
+
+# Format and Lint code
+ruff check src/
 ```
+
+**Note:** ArcGIS and ArcPy are conda-only packages from Esri's conda channel (not available on PyPI). They must be installed through the `environment.yml` conda environment. The `environment.yml` file includes all pip dependencies from `pyproject.toml[dev]` for consistency. Use `conda` for ArcGIS development; use `uv` for open-gis development.
+
+### Existing ArcGIS Pro Environment
+
+If you already have ArcGIS Pro installed, you can develop in that environment:
+
+```powershell
+conda activate <your-arcgis-env-name>
+
+# Install package in editable mode with all development dependencies
+pip install -e ".[dev]"
+
+# Or install from git
+pip install -e "git+https://github.com/miljodirektoratet/gis-utils-public.git#egg=gis-utils-public[dev]"
+```
+
+### Requirements
+
+- **Python 3.11–3.13**
+- **ArcGIS Pro 3.5+** (optional; via conda only, not pip)
+- **Conda** (optional; for environment management with ArcGIS)
 
 ## Deployment (Git Tags)
 
@@ -101,15 +281,15 @@ Before creating a new release tag, update the package version in `pyproject.toml
 git tag --list
 
 # Example: create and push a release tag
-git tag -a v0.0.3 -m "release v0.0.3"
-git push origin v0.0.3
+git tag -a v0.0.6 -m "release v0.0.6"
+git push origin v0.0.6
 
 # Delete wrong tag
-git tag -d v.0.0.3
+git tag -d v.0.0.6
 ```
 
 After deployment, install from the tagged release reference:
 
 ```powershell
-pip install "git+https://github.com/miljodirektoratet/arcpy-utils-public.git@v0.0.3"
+pip install "git+https://github.com/miljodirektoratet/gis-utils-public.git@v0.0.6"
 ```

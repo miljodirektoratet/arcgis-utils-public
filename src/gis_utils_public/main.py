@@ -1,4 +1,4 @@
-"""Test entrypoint for mdir-arcpy-utils-public."""
+"""Test entrypoint for gis-utils-public."""
 
 from __future__ import annotations
 
@@ -13,12 +13,12 @@ def main() -> None:
     """
     version_missing = False
     try:
-        package_version = version("mdir-arcpy-utils-public")
+        package_version = version("gis-utils-public")
     except PackageNotFoundError:
         package_version = "unknown"
         version_missing = True
 
-    print("Hello from mdir-arcpy-utils-public!")
+    print("Hello from gis-utils-public!")
     print(f"Version: {package_version}")
     if version_missing:
         print("Version metadata not available in this runtime.")

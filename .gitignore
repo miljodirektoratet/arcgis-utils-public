@@ -13,6 +13,7 @@ dist/
 .venv/
 venv/
 .pixi/
+env/
 
 # Tool caches
 .ruff_cache/
@@ -26,3 +27,5 @@ venv/
 /.env
 notebooks/.env
 
+# Folders
+tmp/

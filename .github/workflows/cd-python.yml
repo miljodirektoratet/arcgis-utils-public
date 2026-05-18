@@ -1,11 +1,10 @@
 name: CD | Python Build and Publish
 
 on:
-  # Publish using git tags
+  # ONLY ALLOW for publishing using git tags
   push:
     tags:
       - v*.*.*
-  workflow_dispatch:
 
 permissions:
   contents: write # Needed to upload release assets
@@ -31,6 +30,45 @@ jobs:
           name: Packages
           path: dist
 
+      - name: Verify artifact version matches tag
+        shell: bash
+        env:
+          TAG_NAME: ${{ github.ref_name }}
+        run: |
+          set -euo pipefail
+
+          python - <<'PY'
+          import glob
+          import os
+          import re
+          import sys
+
+          expected = os.environ["TAG_NAME"].removeprefix("v")
+          wheel_versions = set()
+          sdist_versions = set()
+
+          for wheel in glob.glob("dist/*.whl"):
+              match = re.search(r"gis_utils_public-([0-9][^-]*)-", wheel)
+              if match:
+                  wheel_versions.add(match.group(1))
+
+          for sdist in glob.glob("dist/*.tar.gz"):
+              match = re.search(r"gis_utils_public-([0-9][^/]*)\.tar\.gz$", sdist)
+              if match:
+                  sdist_versions.add(match.group(1))
+
+          found_versions = wheel_versions | sdist_versions
+          if not found_versions:
+              print("No package versions could be parsed from dist artifacts.")
+              sys.exit(1)
+
+          if found_versions != {expected}:
+              print(f"Version mismatch. Tag expects {expected}, artifacts contain: {sorted(found_versions)}")
+              sys.exit(1)
+
+          print(f"Artifact version check passed: {expected}")
+          PY
+
       - name: Upload to GitHub Release
         uses: softprops/action-gh-release@v2
         with:
@@ -40,11 +78,11 @@ jobs:
 
             Install directly from this release:
             ```bash
-            pip install https://github.com/miljodirektoratet/arcpy-utils-public/releases/download/${{ github.ref_name }}/mdir_arcpy_utils_public-*.whl
+            pip install https://github.com/miljodirektoratet/gis-utils-public/releases/download/${{ github.ref_name }}/gis_utils_public-*.whl
             ```
 
             Or from the repository:
             ```bash
-            pip install git+https://github.com/miljodirektoratet/arcpy-utils-public.git@${{ github.ref_name }}
+            pip install git+https://github.com/miljodirektoratet/gis-utils-public.git@${{ github.ref_name }}
             ```
           fail_on_unmatched_files: true
